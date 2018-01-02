@@ -94,4 +94,16 @@ public class DateUtil {
         return date;
     }
 
+    public static long getTime(int hour, int minute) {
+        long time;
+        time = hour * 60 * 60 * 1000 + minute * 60 * 1000;
+        return time;
+    }
+
+    public static long getTime(int day, int hour, int minute) {
+        long time = getTime(hour, day);
+        time += day * 24 * 60 * 60 * 1000;
+        return time;
+    }
+
 }

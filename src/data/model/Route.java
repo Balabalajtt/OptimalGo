@@ -26,6 +26,7 @@ public class Route implements Serializable {
         this.endStation = endStation;
         this.startTime = startTime;
         this.endTime = endTime;
+        startStation.addRoute(this);//添加到起始城市
     }
 
     public float[] getPrices() {
