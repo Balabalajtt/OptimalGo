@@ -1,7 +1,9 @@
 package util;
 
+import data.model.Account;
 import data.model.Province;
 import data.model.Transport;
+import data.savedata.AccountData;
 import data.savedata.ProvinceData;
 import data.savedata.TransportData;
 
@@ -31,6 +33,14 @@ public class FileUtil {
 
     public static void readTransportData() {
         TransportData.transports = (List<Transport>) readData("transport.dat");
+    }
+
+    public static boolean writeAccountData() {
+        return writeData(AccountData.accountList, "account.dat");
+    }
+
+    public static void readAccountData() {
+        AccountData.accountList = (List<Account>) readData("account.dat");
     }
 
     private static boolean writeData(Object o, String fileName) {

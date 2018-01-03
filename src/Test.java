@@ -2,12 +2,15 @@ import data.model.*;
 import data.savedata.AlgorithmData;
 import data.savedata.ProvinceData;
 import data.savedata.TransportData;
+import ui.AdminMenu;
+import ui.Query;
+import ui.admin.AddCity;
+import ui.admin.AddTransport;
 import util.Algorithm;
 import util.DateUtil;
 import util.FileUtil;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,36 +18,19 @@ import java.util.List;
  */
 public class Test {
     public static void main(String[] args) {
-//        Date date = new Date();
-//        System.out.println(DateUtil.transfer(date));
-//        System.out.println(DateUtil.transferDay(172860000));
 //        ProvinceData.addProvince(new Province("安徽", null));
 //        ProvinceData.addCity(ProvinceData.getProvince("安徽"), new City("安庆"));
 //        ProvinceData.addCity(ProvinceData.getProvince("安徽"), new City("合肥"));
 //        ProvinceData.addCity(ProvinceData.getProvince("安徽"), new City("芜湖"));
-////        print();
+//////        print();
 //        List<City> list = new ArrayList<>();
 //        list.add(new City("西安"));
 //        list.add(new City("宝鸡"));
 //        ProvinceData.addProvince(new Province("陕西", list));
-//        print();
-//        list = new ArrayList<>();
-//        list.add(new City("咸阳"));//list添加后自动变
-//        System.out.println(ProvinceData.addCity(ProvinceData.getProvince("陕西"), list));
-//        print();
-////        ProvinceData.deleteCity("陕西", "咸阳");
-//        print();
-//        FileUtil.writeProvinceData();
-//        System.out.println("======================");
-//        print();
-//        System.out.println("======================");
-//        ProvinceData.provinces.clear();
-//        System.out.println("======================");
-//        ProvinceData.provinces = (List<Province>) FileUtil.readProvinceData();
-//        print();
 
         FileUtil.readTransportData();
         FileUtil.readProvinceData();
+//        FileUtil.readAccountData();
 //        print();
 //        TransportData.deleteTransport();
 
@@ -61,43 +47,59 @@ public class Test {
 //
 //        List<Route> l = new ArrayList<>();
 //        l.add(new Route(new float[]{425, 720, 1110}, ProvinceData.getCity("西安"),
-//                ProvinceData.getCity("安庆"),date11, date13));
-//        l.add(new Route(new float[]{425, 720, 1110}, ProvinceData.getCity("西安"),
+//                ProvinceData.getCity("安庆"),date11, date15));
+//        l.add(new Route(new float[]{25, 720, 1110}, ProvinceData.getCity("西安"),
 //                ProvinceData.getCity("宝鸡"),date11, date12));
-//        l.add(new Route(new float[]{425, 720, 1110}, ProvinceData.getCity("宝鸡"),
+//        l.add(new Route(new float[]{405, 720, 1110}, ProvinceData.getCity("宝鸡"),
 //                ProvinceData.getCity("合肥") ,date14, date15));
-//        l.add(new Route(new float[]{425, 720, 1110}, ProvinceData.getCity("宝鸡"),
+//        l.add(new Route(new float[]{400, 720, 1110}, ProvinceData.getCity("宝鸡"),
 //                ProvinceData.getCity("芜湖"),date13, date14));
-//        l.add(new Route(new float[]{425, 720, 1110}, ProvinceData.getCity("芜湖"),
+//        l.add(new Route(new float[]{80, 720, 1110}, ProvinceData.getCity("芜湖"),
 //                ProvinceData.getCity("合肥"),date15, date16));
-//        l.add(new Route(new float[]{425, 720, 1110}, ProvinceData.getCity("合肥"),
+//        l.add(new Route(new float[]{405, 720, 1110}, ProvinceData.getCity("合肥"),
 //                ProvinceData.getCity("宝鸡"),date16, date17));
-//        l.add(new Route(new float[]{425, 720, 1110}, ProvinceData.getCity("宝鸡"),
+//        l.add(new Route(new float[]{415, 720, 1110}, ProvinceData.getCity("宝鸡"),
 //                ProvinceData.getCity("安庆"),date18, date19));
-//        l.add(new Route(new float[]{425, 720, 1110}, ProvinceData.getCity("合肥"),
+//        l.add(new Route(new float[]{70, 720, 1110}, ProvinceData.getCity("合肥"),
 //                ProvinceData.getCity("安庆"),date12, date13));
-//        l.add(new Route(new float[]{425, 720, 1110}, ProvinceData.getCity("芜湖"),
+//        l.add(new Route(new float[]{60, 720, 1110}, ProvinceData.getCity("芜湖"),
 //                ProvinceData.getCity("安庆"),date17, date18));
+//        TransportData.addTransport(new Transport("K705", 1, true, l));
 //
-//        TransportData.addTransport(new Transport("K666", 2, true, l));
+//        List<Route> routes = new ArrayList<>();
+//        routes.add(new Route(new float[]{700, 720, 1110}, ProvinceData.getCity("西安"),
+//                ProvinceData.getCity("安庆"),date11, date13));
+//        routes.add(new Route(new float[]{100, 720, 1110}, ProvinceData.getCity("西安"),
+//                ProvinceData.getCity("宝鸡"),date12, DateUtil.getDate(2012, 11, 31, 22, 29)));
+//        TransportData.addTransport(new Transport("G888", 1, true, routes));
 //        AlgorithmData.initZhuanchengOneData(ProvinceData.getCity("西安"));
 //
 //        FileUtil.writeTransportData();
 //        FileUtil.writeProvinceData();
         print();
-
-
-        List<TotalPlan> plans = Algorithm.allPlans(ProvinceData.getCity("西安"), ProvinceData.getCity("安庆"));
+////
+        List<TotalPlan> plans = Algorithm.sortPlansByMoney(ProvinceData.getCity("安庆"), ProvinceData.getCity("西安"));
         for (TotalPlan p : plans) {
             for (Route r : p.getRouteList()) {
-                System.out.print(" " + r.getStartStation().getCityName() + "-" + r.getEndStation().getCityName() + "");
+                System.out.print(r.getTransport().getId() + " " + r.getStartStation().getCityName() + "-" + r.getEndStation().getCityName() + "  ");
             }
-            System.out.println();
+            System.out.println("  |" + p.getTransferNumber() + "转乘 " + p.getTotalPrice() + "总价 " + DateUtil.transferHour(p.getDuration()) + "耗时 ");
         }
+
+        System.out.println(ProvinceData.getCity("安庆").getRouteList().size());
+
+//        new Query();
+
+//        new AdminMenu("江婷婷");
+//        new AddTransport();
+
+//        new AddCity();
+
+
 
     }
 
-    public static void print() {
+    private static void print() {
         if (ProvinceData.provinces.size() == 0) {
             System.out.println("无省份");
         }
@@ -115,8 +117,8 @@ public class Test {
             System.out.println(t.getId());
             for (Route r : t.getRoutes()) {
                 System.out.println(r.getStartStation().getCityName() + "-" + r.getEndStation().getCityName()
-                        + ":" + DateUtil.transfer(r.getStartTime())
-                        + "-" + DateUtil.transfer(r.getEndTime()));
+                        + ":" + DateUtil.transferDay(r.getStartTime())
+                        + "-" + DateUtil.transferDay(r.getEndTime()));
             }
         }
     }

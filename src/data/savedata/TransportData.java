@@ -49,6 +49,7 @@ public class TransportData {
                 return 2;
             }
         }
+        route.setTransport(transport);
         transport.getRoutes().add(route);
         return 0;
     }

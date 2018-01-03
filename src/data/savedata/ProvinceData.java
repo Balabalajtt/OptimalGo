@@ -87,6 +87,23 @@ public class ProvinceData {
        return rtn;
     }
 
+    /**
+     * 只要不重复 就添加  省不存在的话先加省
+     * @param provinceName
+     * @param cityName
+     */
+    public static void addCityAlways(String provinceName, String cityName) {
+        if (!provinceExist(new Province(provinceName, null))) {
+            List<City> cities = new ArrayList<>();
+            cities.add(new City(cityName));
+            addProvince(new Province(provinceName, cities));
+            return;
+        }
+        if (!cityExist(getProvince(provinceName), new City(cityName))) {
+            addCity(getProvince(provinceName), new City(cityName));
+        }
+    }
+
     public static int addCity(Province province, List<City> cities) {
         int count = 0;
         for (City city : cities) {

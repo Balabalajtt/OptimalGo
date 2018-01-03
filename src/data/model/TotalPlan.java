@@ -13,8 +13,8 @@ public class TotalPlan implements Serializable {
 
     private float totalPrice = 0;//总价
 
-    private Date startTime;
-    private Date endTime;
+    private long startTime;
+    private long endTime;
     private long duration = 0;//总用时
 
     private int transferNumber = 0;//转站数
@@ -26,12 +26,12 @@ public class TotalPlan implements Serializable {
 
     private void init() {
         for (Route route : routeList) {
-            totalPrice = route.getPrices()[0];
+            totalPrice += route.getPrices();
         }
         startTime = routeList.get(0).getStartTime();
         int e = routeList.size();
-        endTime = routeList.get(e - 1).getStartTime();
-        duration = endTime.getTime() - startTime.getTime();
+        endTime = routeList.get(e - 1).getEndTime();
+        duration = endTime - startTime;
         transferNumber = routeList.size() - 1;
     }
 
@@ -43,12 +43,36 @@ public class TotalPlan implements Serializable {
         return totalPrice;
     }
 
-    public Date getStartTime() {
+    public void setRouteList(List<Route> routeList) {
+        this.routeList = routeList;
+    }
+
+    public void setTotalPrice(float totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public long getStartTime() {
         return startTime;
     }
 
-    public Date getEndTime() {
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public long getEndTime() {
         return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public void setTransferNumber(int transferNumber) {
+        this.transferNumber = transferNumber;
     }
 
     public long getDuration() {

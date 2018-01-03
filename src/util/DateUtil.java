@@ -76,8 +76,8 @@ public class DateUtil {
         return timeStr;
     }
 
-    public static boolean hasTimeConflict(Date d1, Date d2, Date d3, Date d4) {
-        if (d2.before(d3) || d4.before(d1)) {
+    public static boolean hasTimeConflict(long d1, long d2, long d3, long d4) {
+        if (d2<d3 || d4<d1) {
             return false;
         } else {
             return true;
