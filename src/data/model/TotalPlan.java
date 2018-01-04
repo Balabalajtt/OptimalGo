@@ -28,9 +28,9 @@ public class TotalPlan implements Serializable {
         for (Route route : routeList) {
             totalPrice += route.getPrices();
         }
-        startTime = routeList.get(0).getStartTime();
+        startTime = routeList.get(0).getStartTime() + routeList.get(0).getStartDate().getTime();
         int e = routeList.size();
-        endTime = routeList.get(e - 1).getEndTime();
+        endTime = routeList.get(e - 1).getEndTime() + routeList.get(e - 1).getStartDate().getTime();
         duration = endTime - startTime;
         transferNumber = routeList.size() - 1;
     }

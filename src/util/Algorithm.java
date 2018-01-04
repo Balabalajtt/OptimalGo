@@ -6,36 +6,56 @@ import data.model.Route;
 import data.model.TotalPlan;
 import data.savedata.ProvinceData;
 
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by 江婷婷 on 2018/1/2.
  */
 public class Algorithm {
-    public static Date date;
+    public static Date startDate;//出发日期
 
     public static List<TotalPlan> plans = new ArrayList<>();
     public static List<City> cityList;
     public static boolean[] isRead;
-    public static List<TotalPlan> sortPlansByZhuancheng(City startCity, City endCity) {
+
+    public static List<TotalPlan> sortPlansByZhuancheng(City startCity, City endCity, Date date) {
+        Algorithm.startDate = date;
         allPlans(startCity, endCity);
         plans.sort(new SortZhuancheng());
         return plans;
     }
-    public static List<TotalPlan> sortPlansByMoney(City startCity, City endCity) {
+    public static List<TotalPlan> sortPlansByMoney(City startCity, City endCity, Date date) {
+        Algorithm.startDate = date;
         allPlans(startCity, endCity);
         plans.sort(new SortMoney());
         return plans;
     }
-    public static List<TotalPlan> sortPlansByTime(City startCity, City endCity) {
+
+    public static List<TotalPlan> sortPlansByTime(City startCity, City endCity, Date date) {
+        Algorithm.startDate = date;
         allPlans(startCity, endCity);
         plans.sort(new SortTime());
         return plans;
     }
 
+    public static List<TotalPlan> sortPlansByStartTime(City startCity, City endCity, Date date) {
+        Algorithm.startDate = date;
+        allPlans(startCity, endCity);
+        plans.sort(new SortStartTime());
+        return plans;
+    }
+    static class SortStartTime implements Comparator {
+        @Override
+        public int compare(Object o1, Object o2) {
+            TotalPlan t1 = (TotalPlan) o1;
+            TotalPlan t2 = (TotalPlan) o2;
+            if (t1.getStartTime() > t2.getStartTime()) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    }
     static class SortZhuancheng implements Comparator {
         @Override
         public int compare(Object o1, Object o2) {
@@ -91,29 +111,63 @@ public class Algorithm {
 
     private static void dfs(City startCity, City endCity, Route lastRoute, List<Route> routes) {
         for (Route r : startCity.getRouteList()) {
-
-            //当上一个Route为空或时间点和这个Route不交叉
-            if (lastRoute == null || r.getStartTime()>(lastRoute.getEndTime())) {
-                routes.add(r);
-//                System.out.println(startCity.getCityName());
-                isRead[cityList.indexOf(startCity)] = true;
-
-                City nextCity = r.getEndStation();
-                //下一个城市没读过
-                if (!isRead[cityList.indexOf(nextCity)]) {
-                    if (nextCity.getCityName().equals(endCity.getCityName())) {
-                        List<Route> rs = new ArrayList<>();
-                        rs.addAll(routes);//复制routes
-                        plans.add(new TotalPlan(rs));//添加一个完成好的TotalPlan
-                        routes.remove(routes.size() - 1);
-                    } else {
-//                        isRead[cityList.indexOf(nextCity)] = true;
-                        dfs(nextCity, endCity, r, routes);
+            //第一个行程
+            if (lastRoute == null) {
+                r.setStartDate(startDate);
+                boolean flag = false;
+                //r有无startDate这一天的排表
+                for (Date d : r.getTransport().getDispatchDate()) {
+                    if (d.equals(startDate)) {
+                        flag = true;
                     }
-                } else { //下一个城市读过了
-                    routes.remove(routes.size() - 1);
+                }
+                if (!flag) {
+                    continue;
+                }
+            } else {
+                //时间冲突
+                if (lastRoute.getEndTime() > r.getStartTime()) {
+                    //时间冲突赶下一次发车
+                    boolean flag = false;
+                    for (Date d : r.getTransport().getDispatchDate()) {
+                        if (d.after(startDate)) {
+                            r.setStartDate(d);
+                            flag = true;
+                        }
+                    }
+                    //冲突解决不了
+                    if (!flag) {
+                        continue;
+                    }
+                    lastRoute = r;
+                } else {
+                    r.setStartDate(lastRoute.getStartDate());
+//                    lastRoute = r;
                 }
             }
+
+            //当上一个Route为空或时间点和这个Route不交叉
+//            if (lastRoute == null || r.getStartTime()>(lastRoute.getEndTime())) {
+            routes.add(r);
+//                System.out.println(startCity.getCityName());
+            isRead[cityList.indexOf(startCity)] = true;
+
+            City nextCity = r.getEndStation();
+            //下一个城市没读过
+            if (!isRead[cityList.indexOf(nextCity)]) {
+                if (nextCity.getCityName().equals(endCity.getCityName())) {
+                    List<Route> rs = new ArrayList<>();
+                    rs.addAll(routes);//复制routes
+                    plans.add(new TotalPlan(rs));//添加一个完成好的TotalPlan
+                    routes.remove(routes.size() - 1);
+                } else {
+//                        isRead[cityList.indexOf(nextCity)] = true;
+                    dfs(nextCity, endCity, r, routes);
+                }
+            } else { //下一个城市读过了
+                routes.remove(routes.size() - 1);
+            }
+//            }
 
         }
         if (routes.size() > 0) {

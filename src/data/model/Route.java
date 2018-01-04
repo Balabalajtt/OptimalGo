@@ -1,5 +1,7 @@
 package data.model;
 
+import util.DateUtil;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,6 +18,7 @@ public class Route implements Serializable {
     private long startTime;//只存天小时分钟      9时
     private long endTime;//存天小时分钟     一天12时
     private Transport transport;
+    private Date startDate;
 
     /**
      * private 写方法判断传入参数成立不成立
@@ -26,6 +29,7 @@ public class Route implements Serializable {
         this.startTime = startTime;
         this.endTime = endTime;
         this.price = price;
+        this.startDate = null;
         startStation.addRoute(this);//添加到起始城市
     }
 
@@ -76,4 +80,35 @@ public class Route implements Serializable {
     public void setEndTime(long endTime) {
         this.endTime = endTime;
     }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+
+    public String printString() {
+        String s = "";
+        if (startDate != null) {
+            s = startStation.getCityName() + " " + endStation.getCityName() + " ";
+            Date startD = new Date();
+            startD.setTime(startDate.getTime() + startTime);
+            Date endD = new Date();
+            endD.setTime(startDate.getTime() + endTime);
+            s = s + DateUtil.transfer(startD) + " " + DateUtil.transfer(endD) + " " + price;
+        }
+        return s;
+    }
+
 }

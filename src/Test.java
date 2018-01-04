@@ -1,15 +1,15 @@
 import data.model.*;
-import data.savedata.AlgorithmData;
 import data.savedata.ProvinceData;
 import data.savedata.TransportData;
 import ui.AdminMenu;
 import ui.Query;
-import ui.admin.AddCity;
-import ui.admin.AddTransport;
+import ui.admin.AddAdmin;
+import ui.admin.ListAdmin;
 import util.Algorithm;
 import util.DateUtil;
 import util.FileUtil;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class Test {
 
         FileUtil.readTransportData();
         FileUtil.readProvinceData();
-//        FileUtil.readAccountData();
+        FileUtil.readAccountData();
 //        print();
 //        TransportData.deleteTransport();
 
@@ -76,17 +76,22 @@ public class Test {
 //
 //        FileUtil.writeTransportData();
 //        FileUtil.writeProvinceData();
-        print();
-////
-        List<TotalPlan> plans = Algorithm.sortPlansByMoney(ProvinceData.getCity("安庆"), ProvinceData.getCity("西安"));
-        for (TotalPlan p : plans) {
-            for (Route r : p.getRouteList()) {
-                System.out.print(r.getTransport().getId() + " " + r.getStartStation().getCityName() + "-" + r.getEndStation().getCityName() + "  ");
-            }
-            System.out.println("  |" + p.getTransferNumber() + "转乘 " + p.getTotalPrice() + "总价 " + DateUtil.transferHour(p.getDuration()) + "耗时 ");
-        }
 
-        System.out.println(ProvinceData.getCity("安庆").getRouteList().size());
+//        new AdminMenu("江婷婷");
+//        print();
+//////
+//        System.out.println("================");
+//        List<TotalPlan> plans = Algorithm.sortPlansByMoney(ProvinceData.getCity("合肥"), ProvinceData.getCity("西安"), DateUtil.getDate(2018, 1, 5, 0, 0));
+//        for (TotalPlan p : plans) {
+//            for (Route r : p.getRouteList()) {
+//                System.out.print(r.getTransport().getId() + " " + r.getStartStation().getCityName() + "-" + r.getEndStation().getCityName() + "  ");
+//                r.printString();
+//
+//            }
+//            System.out.println("  |" + p.getTransferNumber() + "转乘 " + p.getTotalPrice() + "总价 " + DateUtil.transferHour(p.getDuration()) + "耗时 ");
+//        }
+
+//        System.out.println(ProvinceData.getCity("安庆").getRouteList().size());
 
 //        new Query();
 
@@ -95,7 +100,8 @@ public class Test {
 
 //        new AddCity();
 
-
+//        new AddAdmin();
+        new ListAdmin();
 
     }
 
@@ -115,10 +121,12 @@ public class Test {
         }
         for (Transport t : TransportData.transports) {
             System.out.println(t.getId());
+            for (Date d : t.getDispatchDate()) {
+                System.out.println(DateUtil.transfer(d));
+            }
             for (Route r : t.getRoutes()) {
-                System.out.println(r.getStartStation().getCityName() + "-" + r.getEndStation().getCityName()
-                        + ":" + DateUtil.transferDay(r.getStartTime())
-                        + "-" + DateUtil.transferDay(r.getEndTime()));
+                System.out.println(r.getStartStation().getCityName() + "-" + r.getEndStation().getCityName() + "  "
+                + DateUtil.transferDay(r.getStartTime()) + " " + DateUtil.transferDay(r.getEndTime()) + " " + r.getPrice());
             }
         }
     }

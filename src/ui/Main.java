@@ -73,15 +73,20 @@ public class Main {
                 String account = userText.getText();
                 String password = passwordText.getText();
                 System.out.println(account + " " + password);
-
-                if (judgeAccount(account, password)) {
+                int as = judgeAccount(account, password);
+                if (as == 0) {
                     errorLabel.setText("登录成功");
                     panel.updateUI();
                     frame.dispose();
                     new Query();
-                } else {
+                } else if (as == 2) {
                     errorLabel.setText("账户或密码有误");
                     panel.updateUI();
+                } else {
+                    errorLabel.setText("登录成功");
+                    panel.updateUI();
+                    frame.dispose();
+                    new AdminMenu(account);
                 }
 
             }
@@ -102,18 +107,18 @@ public class Main {
     /**
      * 判断账户密码是否有效
      * @param account
-     * @param password
+     * @param password 0用户 1管理员 2失败
      * @return
      */
-    private static boolean judgeAccount(String account, String password) {
+    private static int judgeAccount(String account, String password) {
         for (Account a : AccountData.accountList) {
             if(a.getName().equals(account) && a.getPassword().equals(password)) {
                 System.out.println("登录成功");
-                return true;
+                return a.getType();
             }
         }
         System.out.println("登录失败");
-        return false;
+        return 2;
     }
 
 }

@@ -17,7 +17,7 @@ public class AdminMenu {
         this.name = name;
         JFrame jf = new JFrame();
         jf.setTitle("管理员菜单");//标题
-        jf.setSize(250, 450);//大小
+        jf.setSize(250, 520);//大小
         jf.setLocationRelativeTo(null);//居中
         jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JPanel jp = new JPanel();
@@ -40,7 +40,7 @@ public class AdminMenu {
         JButton addAccountButton = new JButton("添加管理员");
         addAccountButton.setBounds(x, 80, 160, 25);
         jp.add(addAccountButton);
-        JButton deleteAccountButton = new JButton("删除管理员");
+        JButton deleteAccountButton = new JButton("查看所有账号");
         deleteAccountButton.setBounds(x, 110, 160, 25);
         jp.add(deleteAccountButton);
 
@@ -73,6 +73,20 @@ public class AdminMenu {
         deleteTransportButton.setBounds(x, 340, 160, 25);
         jp.add(deleteTransportButton);
 
+        JLabel queryLabel = new JLabel("查询：");
+        queryLabel.setBounds(x,380,100,25);
+        jp.add(queryLabel);
+        JButton queryButton = new JButton("查询出行方案");
+        queryButton.setBounds(x, 410, 160, 25);
+        jp.add(queryButton);
+
+        queryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Query();
+            }
+        });
+
         addTransportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -81,22 +95,6 @@ public class AdminMenu {
         });
 
 
-//        datepick.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                System.out.println(DateUtil.transfer(datepick.getDate()));
-//            }
-//        });
-//
-//        JButton registerButton = new JButton("查询");
-//        registerButton.setBounds(680, 20, 80, 25);
-//        jp.add(registerButton);
-//        registerButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
         jf.add(jp);
     }
 

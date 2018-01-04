@@ -242,9 +242,11 @@ public class AddTransport {
             Calendar end = Calendar.getInstance();
             end.setTime(endDate);
             while (!c.after(end)) {
-                for (int i = 0; i < w.length; i++) {
-                    if (dayForWeek(c) == w[i]) {
+                for (int aW : w) {
+                    if (dayForWeek(c) == aW) {
                         dateList.add(c.getTime());
+                        System.out.println("****");
+                        System.out.println(DateUtil.transfer(c.getTime()));
                         break;
                     }
                 }

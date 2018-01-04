@@ -13,7 +13,7 @@ public class Account implements Serializable {
     public Account(String name, String password, int type) {
         this.name = name;
         this.password = password;
-        this.type = type;//0用户
+        this.type = type;//0用户 1管理员
     }
 
     public Account(String account, String password) {

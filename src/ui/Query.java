@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 /**
@@ -23,9 +24,9 @@ public class Query {
     public Query() {
         JFrame jf = new JFrame();
         jf.setTitle("交通查询");//标题
-        jf.setSize(660, 800);//大小
+        jf.setSize(660, 420);//大小
         jf.setLocationRelativeTo(null);//居中
-        jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//        jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JPanel jp = new JPanel();
         jp.setLayout(null);
         placeComponents(jf, jp);
@@ -60,34 +61,94 @@ public class Query {
             }
         });
 
+        JButton moneyButton = new JButton("费用优先");
+        moneyButton.setBounds(60, 80, 100, 25);
+        moneyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                plansText.setText("");
+                Algorithm.sortPlansByMoney(ProvinceData.getCity(userText.getText()), ProvinceData.getCity(passwordText.getText()), datepick.getDate());
+                output();
+            }
+        });
+        jp.add(moneyButton);
+        jf.add(jp);
+
+        JButton timeButton = new JButton("时间优先");
+        timeButton.setBounds(180, 80, 100, 25);
+        timeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                plansText.setText("");
+                Algorithm.sortPlansByTime(ProvinceData.getCity(userText.getText()), ProvinceData.getCity(passwordText.getText()), datepick.getDate());
+                output();
+            }
+        });
+        jp.add(timeButton);
+        jf.add(jp);
+
+        JButton zhuanchengButton = new JButton("转乘优先");
+        zhuanchengButton.setBounds(300, 80, 100, 25);
+        zhuanchengButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                plansText.setText("");
+                Algorithm.sortPlansByZhuancheng(ProvinceData.getCity(userText.getText()), ProvinceData.getCity(passwordText.getText()), datepick.getDate());
+                output();
+            }
+        });
+        jp.add(zhuanchengButton);
+        jf.add(jp);
+
+
         JButton registerButton = new JButton("查询");
         registerButton.setBounds(520, 20, 80, 25);
         jp.add(registerButton);
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Algorithm.sortPlansByZhuancheng(ProvinceData.getCity("安庆"), ProvinceData.getCity("西安"));
-                System.out.println(Algorithm.plans.size());
-                for (TotalPlan t : Algorithm.plans) {
-                    plansText.append("1:");
-                    for (Route r : t.getRouteList()) {
-                        plansText.append(r.getTransport().getId() + " " + r.getStartStation().getCityName() + " " +
-                                r.getEndStation().getCityName() + " ");
-                    }
-                    plansText.append("\n");
-                }
+                plansText.setText("");
+                Algorithm.sortPlansByStartTime(ProvinceData.getCity(userText.getText()), ProvinceData.getCity(passwordText.getText()), datepick.getDate());
+                output();
+
             }
         });
 
         plansText = new JTextArea();
-
         plansText.setEditable(false);
         JScrollPane sp = new JScrollPane(plansText);
-        sp.setBounds(20, 120, 600, 500);
+        sp.setBounds(20, 120, 600, 220);
         jp.add(sp);
 
 
         jf.add(jp);
+    }
+
+    private void output() {
+        System.out.println(Algorithm.plans.size());
+        if (Algorithm.plans.size() == 0) {
+            plansText.append("暂无方案");
+        }
+        for (TotalPlan t : Algorithm.plans) {
+            plansText.append("方案：");
+            for (int i = 0; i < t.getRouteList().size(); i++) {
+                Route r = t.getRouteList().get(i);
+                //起始或转乘
+                if (i == 0 || !r.getTransport().getId().equals(t.getRouteList().get(i - 1).getTransport().getId())) {
+                    if(i != 0) {
+                        plansText.append("  --转乘--  ");
+                    }
+                    plansText.append(r.getTransport().getId() + " ");
+                    plansText.append(r.getStartStation().getCityName() + " " +
+                            r.getEndStation().getCityName() + " ");
+                } else {
+                    plansText.append(r.getEndStation().getCityName() + " ");
+                }
+            }
+            plansText.append(new DecimalFormat(".0").format(t.getTotalPrice()) + "元 ");
+            plansText.append(DateUtil.transferDay(t.getDuration()) + " ");
+            plansText.append("\n");
+        }
     }
 
 }
