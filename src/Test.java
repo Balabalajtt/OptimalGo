@@ -3,8 +3,7 @@ import data.savedata.ProvinceData;
 import data.savedata.TransportData;
 import ui.AdminMenu;
 import ui.Query;
-import ui.admin.AddAdmin;
-import ui.admin.ListAdmin;
+import ui.admin.*;
 import util.Algorithm;
 import util.DateUtil;
 import util.FileUtil;
@@ -93,7 +92,7 @@ public class Test {
 
 //        System.out.println(ProvinceData.getCity("安庆").getRouteList().size());
 
-//        new Query();
+        new Query();
 
 //        new AdminMenu("江婷婷");
 //        new AddTransport();
@@ -101,11 +100,28 @@ public class Test {
 //        new AddCity();
 
 //        new AddAdmin();
-        new ListAdmin();
+//        new ListAdmin();
+//        new DeleteCity();
+//        new DeleteTransport();
+//        new ModifyTransport();
+
+        print();
+        for (Province p : ProvinceData.provinces) {
+            System.out.print(p.getProvinceName() + " | ");
+            for (City c: p.getCityList()) {
+                System.out.print(c.getCityName() + " ");
+                for (Route r : c.getRouteList()) {
+                    System.out.println(r.getTransport().getId() + "  " + r.getPrice());
+                }
+            }
+            System.out.println();
+        }
+
+
 
     }
 
-    private static void print() {
+    public static void print() {
         if (ProvinceData.provinces.size() == 0) {
             System.out.println("无省份");
         }
@@ -121,9 +137,9 @@ public class Test {
         }
         for (Transport t : TransportData.transports) {
             System.out.println(t.getId());
-            for (Date d : t.getDispatchDate()) {
-                System.out.println(DateUtil.transfer(d));
-            }
+//            for (Date d : t.getDispatchDate()) {
+//                System.out.println(DateUtil.transfer(d));
+//            }
             for (Route r : t.getRoutes()) {
                 System.out.println(r.getStartStation().getCityName() + "-" + r.getEndStation().getCityName() + "  "
                 + DateUtil.transferDay(r.getStartTime()) + " " + DateUtil.transferDay(r.getEndTime()) + " " + r.getPrice());

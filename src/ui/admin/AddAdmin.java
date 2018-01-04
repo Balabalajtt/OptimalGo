@@ -14,14 +14,14 @@ import java.awt.event.ActionListener;
 public class AddAdmin {
     public AddAdmin() {
         JFrame jf = new JFrame();
-        jf.setTitle("添加管理员账号");//标题
-        jf.setSize(300, 220);//大小
-        jf.setLocationRelativeTo(null);//居中
-//        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        jf.setTitle("添加管理员账号");
+        jf.setSize(300, 220);
+        jf.setLocationRelativeTo(null);
         JPanel jp = new JPanel();
         jp.setLayout(null);
         placeComponents(jf, jp);
         jf.setVisible(true);
+        jf.setResizable(false);
     }
 
     private static void placeComponents(JFrame jf, JPanel jp) {
@@ -77,7 +77,7 @@ public class AddAdmin {
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                jf.dispose();
             }
         });
 

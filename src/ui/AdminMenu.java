@@ -1,7 +1,6 @@
 package ui;
 
-import ui.admin.AddCity;
-import ui.admin.AddTransport;
+import ui.admin.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -17,13 +16,14 @@ public class AdminMenu {
         this.name = name;
         JFrame jf = new JFrame();
         jf.setTitle("管理员菜单");//标题
-        jf.setSize(250, 520);//大小
+        jf.setSize(240, 520);//大小
         jf.setLocationRelativeTo(null);//居中
         jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JPanel jp = new JPanel();
         jp.setLayout(null);
         placeComponents(jf, jp);
         jf.setVisible(true);
+        jf.setResizable(false);
     }
 
     private void placeComponents(JFrame jf, JPanel jp) {
@@ -43,6 +43,18 @@ public class AdminMenu {
         JButton deleteAccountButton = new JButton("查看所有账号");
         deleteAccountButton.setBounds(x, 110, 160, 25);
         jp.add(deleteAccountButton);
+        addAccountButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AddAdmin();
+            }
+        });
+        deleteAccountButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ListAdmin();
+            }
+        });
 
         JLabel cityLabel = new JLabel("城市管理：");
         cityLabel.setBounds(x,150,100,25);
@@ -59,6 +71,12 @@ public class AdminMenu {
         JButton deleteCityButton = new JButton("删除城市");
         deleteCityButton.setBounds(x, 210, 160, 25);
         jp.add(deleteCityButton);
+        deleteCityButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new DeleteCity();
+            }
+        });
 
         JLabel transportLabel = new JLabel("交通管理：");
         transportLabel.setBounds(x,250,100,25);
@@ -69,9 +87,21 @@ public class AdminMenu {
         JButton changeTransportButton = new JButton("修改航班或列车");
         changeTransportButton.setBounds(x, 310, 160, 25);
         jp.add(changeTransportButton);
+        changeTransportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ModifyTransport();
+            }
+        });
         JButton deleteTransportButton = new JButton("删除航班或列车");
         deleteTransportButton.setBounds(x, 340, 160, 25);
         jp.add(deleteTransportButton);
+        deleteTransportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new DeleteTransport();
+            }
+        });
 
         JLabel queryLabel = new JLabel("查询：");
         queryLabel.setBounds(x,380,100,25);

@@ -1,7 +1,6 @@
 package data.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,14 +24,21 @@ public class TotalPlan implements Serializable {
     }
 
     private void init() {
+        String id = routeList.get(0).getTransport().getId();
+        transferNumber = 0;
         for (Route route : routeList) {
-            totalPrice += route.getPrices();
+            if (!route.getTransport().getId().equals(id)) {
+                transferNumber++;
+                id = route.getTransport().getId();
+            }
+            totalPrice += route.getPrice();
         }
         startTime = routeList.get(0).getStartTime() + routeList.get(0).getStartDate().getTime();
         int e = routeList.size();
         endTime = routeList.get(e - 1).getEndTime() + routeList.get(e - 1).getStartDate().getTime();
         duration = endTime - startTime;
-        transferNumber = routeList.size() - 1;
+
+
     }
 
     public List<Route> getRouteList() {

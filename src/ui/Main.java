@@ -1,13 +1,17 @@
 package ui;
 
-import data.model.Account;
+import data.model.*;
 import data.savedata.AccountData;
+import data.savedata.ProvinceData;
+import data.savedata.TransportData;
+import util.DateUtil;
 import util.FileUtil;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 /**
  * Created by 江婷婷 on 2018/1/3.
@@ -18,7 +22,12 @@ public class Main {
 //        AccountData.accountList.add(new Account("admin", "password", 1));
 //        FileUtil.writeAccountData();
 
+        FileUtil.readProvinceData();
+        FileUtil.readTransportData();
         FileUtil.readAccountData();
+
+
+//        print();
 
         new Thread(new Runnable() {
             @Override
@@ -72,7 +81,7 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 String account = userText.getText();
                 String password = passwordText.getText();
-                System.out.println(account + " " + password);
+//                System.out.println(account + " " + password);
                 int as = judgeAccount(account, password);
                 if (as == 0) {
                     errorLabel.setText("登录成功");
@@ -113,12 +122,35 @@ public class Main {
     private static int judgeAccount(String account, String password) {
         for (Account a : AccountData.accountList) {
             if(a.getName().equals(account) && a.getPassword().equals(password)) {
-                System.out.println("登录成功");
+//                System.out.println("登录成功");
                 return a.getType();
             }
         }
-        System.out.println("登录失败");
+//        System.out.println("登录失败");
         return 2;
+    }
+
+    public static void print() {
+        if (ProvinceData.provinces.size() == 0) {
+            System.out.println("无省份");
+        }
+        for (Province p : ProvinceData.provinces) {
+            System.out.print(p.getProvinceName() + " | ");
+            for (City c: p.getCityList()) {
+                System.out.print(c.getCityName() + " ");
+            }
+            System.out.println();
+        }
+        if (TransportData.transports.size() == 0) {
+            System.out.println("无工具");
+        }
+        for (Transport t : TransportData.transports) {
+            System.out.println(t.getId());
+            for (Route r : t.getRoutes()) {
+                System.out.println(r.getStartStation().getCityName() + "-" + r.getEndStation().getCityName() + "  "
+                        + DateUtil.transferDay(r.getStartTime()) + " " + DateUtil.transferDay(r.getEndTime()) + " " + r.getPrice());
+            }
+        }
     }
 
 }

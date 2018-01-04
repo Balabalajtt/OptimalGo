@@ -13,16 +13,17 @@ import java.awt.event.ActionListener;
  */
 public class ListAdmin {
     public ListAdmin() {
-    JFrame jf = new JFrame();
-    jf.setTitle("查看账号");//标题
-    jf.setSize(300, 220);//大小
-    jf.setLocationRelativeTo(null);//居中
+        JFrame jf = new JFrame();
+        jf.setTitle("查看账号");//标题
+        jf.setSize(260, 280);//大小
+        jf.setLocationRelativeTo(null);//居中
 //        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    JPanel jp = new JPanel();
-    jp.setLayout(null);
-    placeComponents(jf, jp);
-    jf.setVisible(true);
-}
+        JPanel jp = new JPanel();
+        jp.setLayout(null);
+        placeComponents(jf, jp);
+        jf.setVisible(true);
+        jf.setResizable(false);
+    }
 
     private static void placeComponents(JFrame jf, JPanel jp) {
 
@@ -39,27 +40,11 @@ public class ListAdmin {
         accountListText.setEditable(false);
 
         JScrollPane sp = new JScrollPane(accountListText);
-        sp.setBounds(20, 20, 50, 200);
+        sp.setBounds(20, 20, 200, 200);
         jp.add(sp);
 
         jf.add(jp);
     }
 
-    private static void addAccount(Account account) {
-        AccountData.accountList.add(account);
-    }
-
-    private static boolean judgeAccountRegister(String account, String password, String password2) {
-        for(Account a : AccountData.accountList) {
-            if (account.equals(a.getName())) {
-                return false;
-            }
-        }
-        if (!password.equals(password2)) {
-            return false;
-        }
-        return true;
-
-    }
 
 }

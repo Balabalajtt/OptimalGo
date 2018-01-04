@@ -17,13 +17,13 @@ public class AddCity {
     public AddCity() {
         JFrame jf = new JFrame();
         jf.setTitle("添加城市");//标题
-        jf.setSize(600, 140);//大小
-        jf.setLocationRelativeTo(null);//居中
-//        jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        jf.setSize(600, 140);
+        jf.setLocationRelativeTo(null);
         JPanel jp = new JPanel();
         jp.setLayout(null);
         placeComponents(jf, jp);
         jf.setVisible(true);
+        jf.setResizable(false);
     }
 
     private static void placeComponents(JFrame jf, JPanel jp) {
@@ -50,6 +50,7 @@ public class AddCity {
             public void actionPerformed(ActionEvent e) {
                 ProvinceData.addCityAlways(userText.getText(), passwordText.getText());
                 FileUtil.writeProvinceData();
+                jf.dispose();
             }
         });
         jf.add(jp);

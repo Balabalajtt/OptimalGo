@@ -61,7 +61,7 @@ public class Algorithm {
         public int compare(Object o1, Object o2) {
             TotalPlan t1 = (TotalPlan) o1;
             TotalPlan t2 = (TotalPlan) o2;
-            if (t1.getRouteList().size() > t2.getRouteList().size()) {
+            if (t1.getTransferNumber() > t2.getTransferNumber()) {
                 return 1;
             } else {
                 return -1;

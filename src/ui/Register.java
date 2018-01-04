@@ -2,6 +2,7 @@ package ui;
 
 import data.model.Account;
 import data.savedata.AccountData;
+import util.FileUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +24,7 @@ public class Register {
         jp.setLayout(null);
         placeComponents(jf, jp);
         jf.setVisible(true);
+        jf.setResizable(false);
     }
 
     private static void placeComponents(JFrame jf, JPanel jp) {
@@ -68,6 +70,7 @@ public class Register {
                     errorLabel.setText("注册成功");
                     jp.updateUI();
                     addAccount(new Account(account, password));
+                    FileUtil.writeAccountData();
                     jf.dispose();
 
                 } else {

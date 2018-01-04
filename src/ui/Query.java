@@ -21,16 +21,17 @@ import java.util.Date;
  */
 public class Query {
     private JTextArea plansText;
+    private JXDatePicker datepick;
     public Query() {
         JFrame jf = new JFrame();
         jf.setTitle("交通查询");//标题
-        jf.setSize(660, 420);//大小
-        jf.setLocationRelativeTo(null);//居中
-//        jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        jf.setSize(660, 420);
+        jf.setLocationRelativeTo(null);
         JPanel jp = new JPanel();
         jp.setLayout(null);
         placeComponents(jf, jp);
         jf.setVisible(true);
+        jf.setResizable(false);
     }
 
     private void placeComponents(JFrame jf, JPanel jp) {
@@ -49,7 +50,7 @@ public class Query {
         passwordText.setBounds(200, 20, 80, 25);
         jp.add(passwordText);
 
-        final JXDatePicker datepick = new JXDatePicker();
+        datepick = new JXDatePicker();
         datepick.setDate(new Date());
         datepick.setBounds(320, 20, 177, 24);
         jp.add(datepick);
@@ -129,24 +130,31 @@ public class Query {
         if (Algorithm.plans.size() == 0) {
             plansText.append("暂无方案");
         }
+        int k = 0;
         for (TotalPlan t : Algorithm.plans) {
-            plansText.append("方案：");
+            Date sd = new Date();
+            Date ed = new Date();
+            sd.setTime(t.getStartTime());
+            ed.setTime(t.getEndTime());
+            System.out.println(t.getEndTime());
+            k++;
+            plansText.append("方案" + k + "：" + DateUtil.transfer(sd) + "--" + DateUtil.transfer(ed) + "\n               ");
             for (int i = 0; i < t.getRouteList().size(); i++) {
                 Route r = t.getRouteList().get(i);
                 //起始或转乘
                 if (i == 0 || !r.getTransport().getId().equals(t.getRouteList().get(i - 1).getTransport().getId())) {
                     if(i != 0) {
-                        plansText.append("  --转乘--  ");
+                        plansText.append(")\n               --转乘--  \n               ");
                     }
-                    plansText.append(r.getTransport().getId() + " ");
+                    plansText.append(r.getTransport().getId() + " (");
                     plansText.append(r.getStartStation().getCityName() + " " +
                             r.getEndStation().getCityName() + " ");
                 } else {
                     plansText.append(r.getEndStation().getCityName() + " ");
                 }
             }
-            plansText.append(new DecimalFormat(".0").format(t.getTotalPrice()) + "元 ");
-            plansText.append(DateUtil.transferDay(t.getDuration()) + " ");
+            plansText.append(")\n               总价" + new DecimalFormat(".0").format(t.getTotalPrice()) + "元       耗时");
+            plansText.append(DateUtil.transferDDay(t.getDuration()) + "       " + t.getTransferNumber() + "次转乘\n");
             plansText.append("\n");
         }
     }

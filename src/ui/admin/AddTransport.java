@@ -30,7 +30,7 @@ public class AddTransport {
     private List<Date> dateList = new ArrayList<>();
 
     private JTextArea routeListText;
-    private String routesString = "城市 / 起始时间 / 到达时间\n";
+    private String routesString = "   出发城市 / 目的城市 / 出发时间 / 到达时间 / 价钱\n";
     JRadioButton week;
     JTextField daText;
     JTextField nameText;
@@ -41,13 +41,13 @@ public class AddTransport {
     public AddTransport() {
         JFrame jf = new JFrame();
         jf.setTitle("添加交通");//标题
-        jf.setSize(620, 580);//大小
+        jf.setSize(560, 560);//大小
         jf.setLocationRelativeTo(null);//居中
-//        jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JPanel jp = new JPanel();
         jp.setLayout(null);
         placeComponents(jf, jp);
         jf.setVisible(true);
+        jf.setResizable(false);
     }
 
     private void placeComponents(JFrame jf, JPanel jp) {
@@ -55,83 +55,73 @@ public class AddTransport {
         train = new JRadioButton("列车");
         train.setBounds(16, 20, 60, 25);
         airplane = new JRadioButton("飞机");
-        airplane.setBounds(100, 20, 60, 25);
+        airplane.setBounds(80, 20, 60, 25);
         ButtonGroup bg = new ButtonGroup();
         bg.add(train);
         bg.add(airplane);
         jp.add(train);
         jp.add(airplane);
 
-        JLabel nameLabel = new JLabel("名字:");
-        nameLabel.setBounds(20, 50, 500, 25);
+        JLabel nameLabel = new JLabel("名字");
+        nameLabel.setBounds(150, 20, 500, 25);
         jp.add(nameLabel);
         nameText = new JTextField(20);
-        nameText.setBounds(60, 50, 165, 25);
+        nameText.setBounds(180, 20, 120, 25);
         jp.add(nameText);
 
-        JLabel routeLabel = new JLabel("路线:");
-        routeLabel.setBounds(20, 80, 500, 25);
+        JLabel routeLabel = new JLabel("添加路线");
+        routeLabel.setBounds(20, 70, 500, 25);
         jp.add(routeLabel);
         JLabel cityLabel = new JLabel("城市");
         cityLabel.setBounds(20, 100, 500, 25);
         jp.add(cityLabel);
         JTextField city1Text = new JTextField(12);
-        city1Text.setBounds(50, 100, 120, 25);
+        city1Text.setBounds(50, 100, 60, 25);
         jp.add(city1Text);
         JTextField city2Text = new JTextField(12);
-        city2Text.setBounds(200, 100, 120, 25);
+        city2Text.setBounds(110, 100, 60, 25);
         jp.add(city2Text);
 
 
-        JLabel timeLabel = new JLabel("开始(天时分)");
-        timeLabel.setBounds(20, 150, 500, 25);
+        JLabel timeLabel = new JLabel("时刻");
+        timeLabel.setBounds(185, 100, 500, 25);
         jp.add(timeLabel);
-        JTextField dayText = new JTextField(12);
-        dayText.setBounds(100, 150, 20, 25);
-        jp.add(dayText);
-        JTextField hourText = new JTextField(12);
-        hourText.setBounds(120, 150, 20, 25);
-        jp.add(hourText);
-        JTextField minuteText = new JTextField(12);
-        minuteText.setBounds(140, 150, 20, 25);
-        jp.add(minuteText);
-        JLabel durationLabel = new JLabel("结束时间(天时分)");
-        durationLabel.setBounds(170, 150, 500, 25);
-        jp.add(durationLabel);
-        JTextField ddayText = new JTextField(12);
-        ddayText.setBounds(270, 150, 20, 25);
-        jp.add(ddayText);
-        JTextField dhourText = new JTextField(12);
-        dhourText.setBounds(290, 150, 20, 25);
-        jp.add(dhourText);
-        JTextField dminuteText = new JTextField(12);
-        dminuteText.setBounds(310, 150, 20, 25);
-        jp.add(dminuteText);
+        JTextField startTimeText = new JTextField(12);
+        startTimeText.setBounds(215, 100, 60, 25);
+        jp.add(startTimeText);
+        JTextField endTimeText = new JTextField(12);
+        endTimeText.setBounds(275, 100, 60, 25);
+        jp.add(endTimeText);
 
+        JLabel moneyLabel = new JLabel("价格");
+        moneyLabel.setBounds(350, 100, 500, 25);
+        jp.add(moneyLabel);
         JTextField moneyText = new JTextField(12);
-        moneyText.setBounds(20, 180, 100, 25);
+        moneyText.setBounds(380, 100, 60, 25);
         jp.add(moneyText);
 
         JButton addRouteButton = new JButton("添加");
-        addRouteButton.setBounds(320, 180, 60, 25);
+        addRouteButton.setBounds(460, 100, 60, 25);
         jp.add(addRouteButton);
         addRouteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                long startTime = Integer.parseInt(dayText.getText()) * 24 * 60 * 60 * 1000 +
-                        Integer.parseInt(hourText.getText()) * 60 * 60 * 1000 +
-                        Integer.parseInt(minuteText.getText()) * 60 * 1000;
-                long endTime = Integer.parseInt(ddayText.getText()) * 24 * 60 * 60 * 1000 +
-                        Integer.parseInt(dhourText.getText()) * 60 * 60 * 1000 +
-                        Integer.parseInt(dminuteText.getText()) * 60 * 1000;
+                String[] startText = startTimeText.getText().split(" ");
+                String[] endText = endTimeText.getText().split(" ");
+                long startTime = Integer.parseInt(startText[0]) * 24 * 60 * 60 * 1000 +
+                        Integer.parseInt(startText[1]) * 60 * 60 * 1000 +
+                        Integer.parseInt(startText[2]) * 60 * 1000;
+                long endTime = Integer.parseInt(endText[0]) * 24 * 60 * 60 * 1000 +
+                        Integer.parseInt(endText[1]) * 60 * 60 * 1000 +
+                        Integer.parseInt(endText[2]) * 60 * 1000;
                 float money = Float.parseFloat(moneyText.getText());
                 City startCity = ProvinceData.getCity(city1Text.getText());
                 City endCity = ProvinceData.getCity(city2Text.getText());
 
                 Route route = new Route(startCity, endCity, startTime, endTime, money);
                 routeList.add(route);
-                routeListText.append(startCity.getCityName() + " 到 " + endCity.getCityName() + " " +
-                        DateUtil.transferDay(startTime) + " " + DateUtil.transferDay(endTime) + " " + money + "元\n");
+                routeListText.append("   " + startCity.getCityName() + "-->" + endCity.getCityName() + "   " +
+                        DateUtil.transferDay(startTime) + "-->" + DateUtil.transferDay(endTime) + "   " + money + "元\n");
 
             }
         });
@@ -141,28 +131,38 @@ public class AddTransport {
         routeListText.setEditable(false);
 
         JScrollPane sp = new JScrollPane(routeListText);
-        sp.setBounds(20, 220, 500, 200);
+        sp.setBounds(20, 150, 500, 200);
         jp.add(sp);
-
+        JLabel zhouqiLabel = new JLabel("添加周期");
+        zhouqiLabel.setBounds(20, 375, 500, 25);
+        jp.add(zhouqiLabel);
         week = new JRadioButton("星期");
-        week.setBounds(16, 420, 60, 25);
+        week.setBounds(16, 402, 60, 25);
         JRadioButton interval = new JRadioButton("间隔天数");
-        interval.setBounds(100, 420, 100, 25);
+        interval.setBounds(80, 402, 80, 25);
         ButtonGroup b = new ButtonGroup();
         b.add(week);
         b.add(interval);
         jp.add(week);
         jp.add(interval);
 
+        /**
+         * 选择星期 输入： 1 3 5空格间隔
+         * 选择间隔 输入一个数字： 2
+         */
+        daText = new JTextField(12);
+        daText.setBounds(160, 405, 120, 25);
+        jp.add(daText);
+
 
         final JXDatePicker datepick1 = new JXDatePicker();
         datepick1.setDate(new Date());
-        datepick1.setBounds(20, 450, 100, 24);
+        datepick1.setBounds(310, 405, 100, 24);
         jp.add(datepick1);
 
         final JXDatePicker datepick2 = new JXDatePicker();
         datepick2.setDate(new Date());
-        datepick2.setBounds(150, 450, 100, 24);
+        datepick2.setBounds(420, 405, 100, 24);
         jp.add(datepick2);
         datepick1.addActionListener(new ActionListener() {
             @Override
@@ -177,17 +177,9 @@ public class AddTransport {
             }
         });
 
-        /**
-         * 选择星期 输入： 1 3 5空格间隔
-         * 选择间隔 输入一个数字： 2
-         */
-        daText = new JTextField(12);
-        daText.setBounds(280, 450, 180, 25);
-        jp.add(daText);
-
 
         JButton confirmButton = new JButton("确定");
-        confirmButton.setBounds(200, 500, 60, 25);
+        confirmButton.setBounds(140, 460, 120, 25);
         jp.add(confirmButton);
         confirmButton.addActionListener(new ActionListener() {
             @Override
@@ -202,7 +194,7 @@ public class AddTransport {
         });
 
         JButton cancelButton = new JButton("取消");
-        cancelButton.setBounds(280, 500, 60, 25);
+        cancelButton.setBounds(280, 460, 120, 25);
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
